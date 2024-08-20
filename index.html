@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+</head>
+<body>
+    <style>
+        button{
+        color:white;
+        background:blue;
+        border:none;
+        padding:10px;margin:5px;
+        border-radius:1em;
+        }
+        input{
+        padding:.5em;margin:.5em;
+        }
+    </style>
+
+
+    <p>How are you today?</p>
+    <p><button type="button" onclick="SpeechRecog()"><i class="fas fa-microphone"></i></button></p>
+
+    <div id="action"></div>
+
+    <input type="text" id="output">
+
+    <div id="gotSpeech"></div>
+
+    <div id="response"></div>
+    
+    
+    <script>
+		    function SpeechRecog() {
+		        var output = document.getElementById("output");
+		        var action = document.getElementById("action");
+		        var gotSpeech = document.getElementById("gotSpeech");
+		        var response = document.getElementById("response");
+
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+            
+                // This runs when the speech recognition service starts
+                recognition.onstart = function() {
+                    action.innerHTML = "<small>you can speak now...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    action.gotSpeech = "<small><i class='fas fa-check'></i></small>";
+                    // action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();  
+                }
+              
+                // This runs when the speech recognition service returns result
+                recognition.onresult = function(event) {
+                    var transcript = event.results[0][0].transcript;
+                    var confidence = event.results[0][0].confidence;
+                    output.value=transcript;
+
+                    const word = 'fine';
+
+                    if (transcript.includes(word)) {
+                        response.innerText = "Good to , you can proceed!"
+                    }else{
+                        response.innerText = "Try again man!"
+                    }
+
+                };
+              
+                 // start recognition
+                 recognition.start();
+	        }
+    </script>
+</body>
+</html>
